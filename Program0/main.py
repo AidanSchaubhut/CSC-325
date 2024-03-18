@@ -140,7 +140,6 @@ while True:
 
 
 finalList = LinkedList()
-n = int(n)
 print(f'n: {n}')
 while n > 0:
     finalList.append(randint(1, 100))
