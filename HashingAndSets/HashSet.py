@@ -31,7 +31,7 @@ class HashSet:
     
     def __rehash(oldList, newList):
         for x in oldList:
-            if (x != None) and (type(x) != HashSet.__PlaceHolder):
+            if (x != None) and (type(x) != HashSet.__Placeholder):
                 HashSet.__add(x, newList)
         return newList
     
@@ -42,7 +42,7 @@ class HashSet:
             if load >= 0.75:    # If the load is greater than 75%
                 self.items = HashSet.__rehash(self.items, [None] * 2 * len(self.items)) # Rehash the list into a new list with double the size
 
-    class __PlaceHolder:
+    class __Placeholder:
         def __init__(self) -> None:
             pass
         def __eq__(self, other):
@@ -58,7 +58,7 @@ class HashSet:
                 if items[nextIndex] == None:
                     items[index] = None
                 else:
-                    items[index] = HashSet.__PlaceHolder()
+                    items[index] = HashSet.__Placeholder()
                 
                 return True
             index = (index + 1) % len(items)
@@ -95,7 +95,7 @@ class HashSet:
     
     def __iter__(self):
         for i in range(len(self.items)):
-            if (self.items[i] != None) and (type(self.items[i]) != HashSet.__PlaceHolder):
+            if (self.items[i] != None) and (type(self.items[i]) != HashSet.__Placeholder):
                 yield self.items[i]
 
     # A - B
