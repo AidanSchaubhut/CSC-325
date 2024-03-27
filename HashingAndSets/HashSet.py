@@ -82,6 +82,7 @@ class HashSet:
             if load <= 0.25:
                 self.items = HashSet.__rehash(self.items, [None] * int(len(self.items) / 2))
 
+    # Overrides the 'in' operator
     def __contains__(self, item):
         index = hash(item) % len(self.items)
 
@@ -93,9 +94,38 @@ class HashSet:
         return False
     
     def __iter__(self):
-        pass
+        for i in range(len(self.items)):
+            if (self.items[i] != None) and (type(self.items[i]) != HashSet.__PlaceHolder):
+                yield self.items[i]
 
-hash_set = HashSet([1,2,3,4,4,5,5,6,7,10,12,15,15])
+    # A - B
+    # A = {10, 20, 30, 40, 80}
+    # B = {100, 30, 80, 40, 60}
+    # C = A - B = {10, 20}
+    # C = B - A = {100, 60}
+                
+    def difference_update(self, other):  # A.difference_update(B) -> A = A - B
+        for item in other: # B = other
+            self.discard(item)  # A.discard(item)
+        
+    def difference(self, other): # A.difference(B) -> C = A - B
+        result = HashSet(self)
+        result.difference_update(other)
+        return result
+    
+    def issuperset(self, other):
+        for item in other:
+            if item not in self:
+                return False
+        return True
+    
+    def clear(self):
+        self.numItems = 0
+        self.items = [None] * 10
 
+    def update(self, other):
+        for item in other:
+            self.add(item)
 
-print(23 in hash_set)
+    def __len__(self):
+        return self.numItems
