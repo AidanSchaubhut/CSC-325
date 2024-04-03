@@ -1,11 +1,35 @@
 import sys
 from HashSet import HashSet
 
+def getColumn(matrix, colIndex):
+    col = []
+    for rowIndex in range(9):
+        col.append(matrix[rowIndex][colIndex])
+    return col
+
+def getSquare(matrix, rowIndex, colIndex):
+    square = []
+    for i in range(rowIndex, rowIndex + 3):
+        for j in range(colIndex, colIndex + 3):
+            square.append(matrix[i][j])
+    return square
+
 def getGroups(matrix):
+    groups = []
     # groups for rows
+    for i in range(9):
+        groups.append(list(matrix[i]))
+    
     # groups for cols
+    for i in range(9):
+        groups.append(getColumn(matrix, i))
+
     # groups for squares
-    pass
+    for i in range(0, 9, 3):
+        for j in range(0, 9, 3):
+            groups.append(getSquare(matrix, i, j))
+
+    return groups
     
 
 def printMatrix(matrix):
