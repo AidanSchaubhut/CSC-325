@@ -35,6 +35,21 @@ class HashSet:
                 HashSet.__add(x, newList)
         return newList
     
+    def __getitem__(self, item):
+        """
+        Magic function responsible for accessing a single item in a set
+        Invoked when using "[]" (indexer) operator.
+        """
+        idx = hash(item) % len(self.items)
+        
+        # loop to go through the items in the chain starting at hashed index
+        while self.items[idx] != None:
+            if self.items[idx] == item:
+                return self.items[idx]
+            idx = (idx + 1) % len(self.items)
+
+        return None
+    
     def add(self, item):
         if HashSet.__add(item, self.items):  # If True then the values was inserted. False, it was not
             self.numItems += 1  # Add 1 to the list size

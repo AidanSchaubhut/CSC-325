@@ -30,7 +30,31 @@ def getGroups(matrix):
             groups.append(getSquare(matrix, i, j))
 
     return groups
+
+def cardinality(x):
+    return len(x)
+
+def reduceGroup(group):
+    changed = False
+    group.sort(key=cardinality)
+    changed = rule2(group)
+    changed = rule1(group)
+    return changed
+
+def reduceGroups(groups):
+    changed = False
+    for group in groups:
+        if reduceGroup(group):
+            changed = True
+    return changed
     
+def reduce(matrix):
+    changed = True
+    groups = getGroups(matrix)
+
+    while changed:
+        changed = reduceGroups(groups)
+
 
 def printMatrix(matrix):
     for i in range(9): # Row
@@ -61,6 +85,11 @@ def main():
 
     print("Solving this sudoku: ")
 
+    printMatrix(matrix)
+
+    reduce(matrix)
+    print()
+    print("Solution: ")
     printMatrix(matrix)
 
 main()
