@@ -118,6 +118,21 @@ class HashSet:
         """
         return self.numItems
     
+    def __str__(self):
+        """
+        Magic function responsible for returning a string representation of a set
+        Invoked when "print(set)" is executed
+        """
+        result = "{"
+        for item in self:
+            if item != None:
+                result = result + str(item) + ", "
+        result = result[0:len(result)-2] + "}"
+        return result
+    
+    def __repr__(self):
+        return str(self)
+    
     def add(self, item):
         """
         Function responsible for adding items into a set.
@@ -202,3 +217,9 @@ class HashSet:
             
         return True
     
+def main():
+    set1 = HashSet({1,2,3,4})
+    set2 = HashSet({1,2,3})
+    print(set1)
+
+main()
