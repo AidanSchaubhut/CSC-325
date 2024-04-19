@@ -13,7 +13,7 @@ class AVLTree:
 
         def getBalance(self):
             return self.balance
-        def setBalance(self):
+        def setBalance(self, balance):
             self.balance = balance
         def __repr__(self):
             return f"AVLNode({repr(self.item)}, balance = {repr(self.balance)}, left = {repr(self.left)}, right = {repr(self.right)})"
@@ -34,7 +34,19 @@ class AVLTree:
             if self == None:
                 return
             ### WRITE YOUR CODE HERE ###
-                       
+            # If no children -> print item
+            if self.left == None and self.right == None:
+                print(self.item)
+                return
+
+            # If left child -> go left
+            if self.left != None:
+                self.left._getLeaves()
+
+            # If right child -> go right
+            if self.right != None:
+                self.right._getLeaves()
+
     def insert(self, item):
 
         def rotateRight(pivot):
@@ -156,7 +168,17 @@ class AVLTree:
         # returns True if value is in tree and False otherwise
 
         ### WRITE YOUR CODE HERE ###
-
+        # trivial case
+        if node == None:
+            return False
+        
+        # If reached node with lookup item -> return True
+        if node.item == item:
+            return True
+        
+        # If item is larger than node -> go right
+        if item > node.item:
+            return AVLTree.__lookup(node.right, item)
         # returns True or False
         return AVLTree.__lookup(node.left, item)
 
