@@ -57,6 +57,9 @@ class AVLTree:
             leftChild = pivot.left
 
             ### WRITE YOUR CODE HERE ###
+            temp = leftChild.right
+            leftChild.right = pivot
+            pivot.left = temp
             
             # return bad child
             return leftChild
@@ -69,6 +72,9 @@ class AVLTree:
             rightChild = pivot.right
 
             ### WRITE YOUR CODE HERE ###
+            temp = rightChild.left
+            rightChild.left = pivot
+            pivot.right = temp
             
             # return bad child
             return rightChild
