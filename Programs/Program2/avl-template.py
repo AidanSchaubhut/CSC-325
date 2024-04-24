@@ -1,3 +1,6 @@
+# The implementation of some functions were from the help
+# of Trisha Carter. She helped with the logic behind some functions
+
 import sys
 
 class AVLTree:
@@ -36,7 +39,7 @@ class AVLTree:
             ### WRITE YOUR CODE HERE ###
             # If no children -> print item
             if self.left == None and self.right == None:
-                print(self.item)
+                print(self.item, end=" ")
                 return
 
             # If left child -> go left
@@ -57,9 +60,11 @@ class AVLTree:
             leftChild = pivot.left
 
             ### WRITE YOUR CODE HERE ###
-            temp = leftChild.right
-            leftChild.right = pivot
-            pivot.left = temp
+            temp = AVLTree.AVLNode(pivot.item)
+            temp.right = pivot.right
+            temp.left = leftChild.right
+            pivot = leftChild
+            leftChild.right = temp
             
             # return bad child
             return leftChild
@@ -72,13 +77,34 @@ class AVLTree:
             rightChild = pivot.right
 
             ### WRITE YOUR CODE HERE ###
-            temp = rightChild.left
-            rightChild.left = pivot
-            pivot.right = temp
+            temp = AVLTree.AVLNode(pivot.item)
+            temp.left = pivot.left
+
+            temp.right = rightChild.left
+
+            pivot = rightChild
+
+            rightChild.left = temp
             
             # return bad child
             return rightChild
+        
+        # Helper function that calculates and sets the balance of a node
+        def __setBalance(node):
+            # Helper function to find the height of a node
+            def height(n):
+                if n is None:
+                    return 0
+                else:
+                    return max(height(n.left), height(n.right)) + 1
 
+            # Calculates the height of each sub tree
+            rightHeight = height(node.right)
+            leftHeight = height(node.left)
+            # Calculates and set the balance of the node
+            node.setBalance(rightHeight - leftHeight)
+        
+        
         def __insert(root, item):
             # if empty tree, create a node with given item
             if root == None:
@@ -88,10 +114,11 @@ class AVLTree:
             # inserting into left subtree with specific rules to handle
             if item < root.item:
                 root.left = __insert(root.left, item)
-
-                # handle Case 1 & Case 2 with no rotations
-                ### WRITE YOUR CODE HERE ###
-
+                
+                # If the balance of the root is 0, 1, or -1 then that means we are in case 1 or 2
+                if root.getBalance() in [0, 1, -1]:
+                    __setBalance(root)
+                    
                 # check for Case 3 when AVL is unbalanced
                 if root.getBalance() == -2:
                     # bad child must be left child, since we are in the left subtree
@@ -99,15 +126,31 @@ class AVLTree:
 
                     # Subcase A - Single Rotation
                     ### WRITE YOUR CODE HERE ###
+                    # Rotate to the right
+                    if badChild.getBalance() == -1:
+                        root = rotateRight(root)
+
+                        # update the balance
+                        __setBalance(root)
                         
+
                     # Subcase B - Double Rotation
                     ### WRITE YOUR CODE HERE ###
+                    
+                    # Trisha helped with the logic behind subcase B
+                    elif badChild.getBalance() == 1:
 
                         # adjusting balances of pivot and bad child based on bad grandchild
                         # if value inserted at badGrandChild
                         # then pivot balance = 0, bad child balance = 0
                         ### WRITE YOUR CODE HERE ###
+                        badChild = rotateLeft(badChild)
+                        root.left = badChild
+                        __setBalance(badChild.left)
 
+                        # Double rotation
+                        root = rotateRight(root)
+                        __setBalance(root)
                         # if inserted value smaller than bad grandchild (left subtree)
                         # then pivot balance = 1, bad child balance = 0
                         ### WRITE YOUR CODE HERE ###
@@ -123,7 +166,8 @@ class AVLTree:
 
                 # handle Case 1 & Case 2 with no rotations
                 ### WRITE YOUR CODE HERE ###
-                    
+                if root.getBalance() in [0, 1, -1]:
+                    __setBalance(root)
                 # check for Case 3 when AVL is unbalanced
                 if root.getBalance() == 2:
                     # bad child must be right child, since we are in the right subtree
@@ -131,10 +175,19 @@ class AVLTree:
 
                     # Subcase A - Single Rotation
                     ### WRITE YOUR CODE HERE ###
-
+                    if badChild.getBalance() == 1:
+                        root = rotateLeft(root)
+                        __setBalance(root)
                     # Subcase B - Double Rotation
                     ### WRITE YOUR CODE HERE ###
+                    elif badChild.getBalance() == -1:
+                        badChild = rotateRight(badChild)
+                        root.right = badChild
+                        __setBalance(badChild.right)
 
+                        # Double rotation
+                        root = rotateLeft(root)
+                        __setBalance(root)
                         # adjusting balances of pivot and bad child based on bad grandchild
                         # if value inserted at badGrandChild
                         # then pivot balance = 0, bad child balance = 0
