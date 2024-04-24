@@ -125,25 +125,17 @@ class AVLTree:
                     badChild = root.left
 
                     # Subcase A - Single Rotation
-                    ### WRITE YOUR CODE HERE ###
                     # Rotate to the right
                     if badChild.getBalance() == -1:
                         root = rotateRight(root)
-
                         # update the balance
                         __setBalance(root)
-                        
-
-                    # Subcase B - Double Rotation
-                    ### WRITE YOUR CODE HERE ###
                     
+                    # Subcase B - Double Rotation
                     # Trisha helped with the logic behind subcase B
                     elif badChild.getBalance() == 1:
 
-                        # adjusting balances of pivot and bad child based on bad grandchild
-                        # if value inserted at badGrandChild
-                        # then pivot balance = 0, bad child balance = 0
-                        ### WRITE YOUR CODE HERE ###
+                        # Rotate the bad child and pivot
                         badChild = rotateLeft(badChild)
                         root.left = badChild
                         __setBalance(badChild.left)
@@ -151,22 +143,15 @@ class AVLTree:
                         # Double rotation
                         root = rotateRight(root)
                         __setBalance(root)
-                        # if inserted value smaller than bad grandchild (left subtree)
-                        # then pivot balance = 1, bad child balance = 0
-                        ### WRITE YOUR CODE HERE ###
-                        
-                        # if inserted value larger than bad grandchild (right subtree)
-                        # then pivot balance = 0, bad child = -1
-                        ### WRITE YOUR CODE HERE ###
 
             # item to be inserted is larger than root
             # inserting into right subtree with specific rules to handle
             elif item > root.item:
                 root.right = __insert(root.right, item)
 
-                # handle Case 1 & Case 2 with no rotations
-                ### WRITE YOUR CODE HERE ###
+                # If the balance of the root is 0, 1, or -1 then that means we are in case 1 or 2
                 if root.getBalance() in [0, 1, -1]:
+                    # Just update the balance
                     __setBalance(root)
                 # check for Case 3 when AVL is unbalanced
                 if root.getBalance() == 2:
@@ -174,33 +159,18 @@ class AVLTree:
                     badChild = root.right
 
                     # Subcase A - Single Rotation
-                    ### WRITE YOUR CODE HERE ###
                     if badChild.getBalance() == 1:
                         root = rotateLeft(root)
                         __setBalance(root)
                     # Subcase B - Double Rotation
-                    ### WRITE YOUR CODE HERE ###
                     elif badChild.getBalance() == -1:
+                        # Rotate the bad child and the pivot
                         badChild = rotateRight(badChild)
                         root.right = badChild
                         __setBalance(badChild.right)
-
                         # Double rotation
                         root = rotateLeft(root)
-                        __setBalance(root)
-                        # adjusting balances of pivot and bad child based on bad grandchild
-                        # if value inserted at badGrandChild
-                        # then pivot balance = 0, bad child balance = 0
-                        ### WRITE YOUR CODE HERE ###
-                        
-                        # if inserted value smaller than bad grandchild (left subtree)
-                        # then pivot balance = 0, bad child balance = 1
-                        ### WRITE YOUR CODE HERE ###
-                        
-                        # if inserted value larger than bad grandchild (right subtree)
-                        # then pivot balance = -1, bad child = 0
-                        ### WRITE YOUR CODE HERE ###
-            
+                        __setBalance(root)   
                         
             # check if inserting duplicated value
             else:
