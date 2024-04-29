@@ -30,6 +30,7 @@ class Graph:
         self.vertList[key] = newVertex
         return newVertex
     
+    # We input the label for the vertex but we are returning the actual vertex object
     def getVertex(self, n):
         if n in self.vertList:
             return self.vertList[n]
@@ -65,8 +66,28 @@ def main():
 
     for i in range(6):
         graph.addVertex(i)
-    
+
+    # addEdge(source, destination, weight)
     graph.addEdge(0, 1, 5)
+    graph.addEdge(0, 5, 2)
+    graph.addEdge(1, 2, 4)
+    graph.addEdge(2, 3, 9)
+    graph.addEdge(3, 4, 7)
+    graph.addEdge(3, 5, 3)
+    graph.addEdge(4, 0, 1)
+    graph.addEdge(5, 4, 8)
+    graph.addEdge(5, 2, 1)
+
+    print("(source, destination)")
+    for vertex in graph:
+        for adjacent in vertex.getConnections():
+            print(f"({vertex.getId()}, {adjacent.getId()})")
+
+    print()
+    
+    for k, v in graph.vertList.items():
+        print(k, v)
+    
 
 
 main()
