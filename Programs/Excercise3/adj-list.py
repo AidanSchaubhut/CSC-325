@@ -1,3 +1,5 @@
+from queue import Queue
+
 class Graph:
 
     def __init__(self):
@@ -61,6 +63,35 @@ class Graph:
             visited.add(s)
             for nextNdoe in [x.id for x in self.vertList[s].connectedTo]:
                 self.dfs(nextNdoe, visited)
+    
+    # The implementation for the stack in this case was found at https://www.geeksforgeeks.org/stack-in-python/
+    def dfs_iter(self, s, visted=None):
+        if visted is None:
+            visted = set()
+
+        s = []
+        s.append(s)
+        while len(s) != 0:
+            
+
+
+    def bfs(self, s, visited=None):
+        if visited is None:
+            visited = set()
+
+        q = Queue()
+        q.put(s)
+        visited.add(s)
+
+        while not q.empty():
+            current_node = q.get()
+            print(current_node, end=' ')
+
+            for next_node in [x.id for x in self.vertList[current_node].connectedTo]:
+                if next_node not in visited:
+                    q.put(next_node)
+                    visited.add(next_node)
+
 
     def __contains__(self, n): # vertex in Graph
         return (n in self.vertList)
@@ -72,35 +103,48 @@ class Graph:
         return iter(self.vertList.values())
 
 def main():
+
     graph = Graph()
 
     for i in range(6):
         graph.addVertex(i)
 
-    # addEdge(source, destination, weight)
-    graph.addEdge(0, 1, 5)
-    graph.addEdge(0, 5, 2)
-    graph.addEdge(1, 2, 4)
-    graph.addEdge(2, 3, 9)
-    graph.addEdge(3, 4, 7)
-    graph.addEdge(3, 5, 3)
-    graph.addEdge(4, 0, 1)
-    graph.addEdge(5, 4, 8)
-    graph.addEdge(5, 2, 1)
+    graph.addEdge(0,1)
+    graph.addEdge(1,0)
 
-    print("(source, destination)")
-    for vertex in graph:
-        for adjacent in vertex.getConnections():
-            print(f"({vertex.getId()}, {adjacent.getId()})")
+    graph.addEdge(0,2)
+    graph.addEdge(2,0)
+
+    graph.addEdge(0,3)
+    graph.addEdge(3,0)
+
+    graph.addEdge(0,4)
+    graph.addEdge(4,0)
+
+    graph.addEdge(1,2)
+    graph.addEdge(2,1)
+
+    graph.addEdge(2,3)
+    graph.addEdge(3,2)
+
+    graph.addEdge(2,5)
+    graph.addEdge(5,2)
+
+    graph.addEdge(3,4)
+    graph.addEdge(4,3)
+
+    graph.addEdge(4,5)
+    graph.addEdge(5,4)
+
+    graph.addEdge(3,5)
+    graph.addEdge(5,3)
 
     print()
-    
     for k, v in graph.vertList.items():
         print(k, v)
-
-    print()
-    graph.dfs(5)
     
+    print()
 
+    graph.bfs(3)
 
 main()
