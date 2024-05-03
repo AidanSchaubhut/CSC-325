@@ -69,10 +69,17 @@ class Graph:
         if visted is None:
             visted = set()
 
-        s = []
-        s.append(s)
-        while len(s) != 0:
-            
+        stack = []
+        stack.append(s)
+        while len(stack) != 0:
+            current_node = stack.pop()
+            visted.add(current_node)
+            print(current_node, end=' ')
+
+            for next_node in [x.id for x in self.vertList[current_node].connectedTo]:
+                if next_node not in visted:
+                    stack.append(next_node)
+                visted.add(next_node)
 
 
     def bfs(self, s, visited=None):
@@ -142,9 +149,9 @@ def main():
     print()
     for k, v in graph.vertList.items():
         print(k, v)
-    
+
     print()
 
-    graph.bfs(3)
+    graph.dfs_iter(3)
 
 main()
