@@ -28,7 +28,7 @@ class Graph:
             return f"connected to: {str([x.id for x in self.connectedTo])}"  
 
         def __repr__(self):
-            return self.id 
+            return str(self.id )
 
     def addVertex(self, key):
         self.numVertices += 1
@@ -86,6 +86,14 @@ class Graph:
                     visited.add(next_node)
 
     def kruskals(self):
+
+        # Function is used to find the reference of the cluster that a vertex is contained in
+        def findVertex(vertex) -> set:
+            for cluster in vertices_sets:
+                if vertex in cluster:
+                    return cluster
+            return None
+        
         vertices_sets = set()
         edges_dict = dict()
         MST = set()
@@ -94,10 +102,36 @@ class Graph:
 
         # Fill vertices_sets with all verticies from the graph
         for vert in self.getVertices():
-            newVert = frozenset([vert])
+            newVert = frozenset([vert]) # The frozen set idea came from https://www.geeksforgeeks.org/how-to-create-a-set-of-sets-in-python/#
             vertices_sets.add(newVert)
-        print(vertices_sets)
-        
+
+        # Init the dictionary with all the edges
+        for source in self.getVertices():
+            for dest in self.getVertex(source).getConnections():
+                edge = tuple(sorted((source, dest.getId())))  # Sort the vertices in the edge tuple
+                edges_dict[edge] = self.getVertex(source).getWeight(dest)
+
+        # Sort the dictionary by the weights
+        # This method for sorting the dictionary came from https://www.freecodecamp.org/news/sort-dictionary-by-value-in-python/
+        sorted_edges = sorted(edges_dict.items(), key=lambda x:x[1])
+        edges_dict = dict(sorted_edges)
+
+        for (source, destination) in edges_dict:
+            
+            set1 = findVertex(source)
+            set2 = findVertex(destination)
+            
+            if set1 != set2:
+                # Adding the edge and weight to the MST
+                tba = ((source, destination), edges_dict[(source, destination)])
+                MST.add(tba)
+                # Creates a new cluster containing the other two clusters
+                newSet = set1.union(set2)
+                # Removes the old clusters and added the combined one to vertices_sets
+                vertices_sets.remove(set1)
+                vertices_sets.remove(set2)
+                vertices_sets.add(newSet)
+
         return MST
 
 def main():
@@ -115,7 +149,9 @@ def main():
     # print adjacency list representation of the graph
     print()
     ### WRITE YOUR CODE HERE ###
-    
+    print("Graph adjacency list:")
+    for k, v in graph.verList.items():
+        print(k, v)
     # create graph MST
     MST = graph.kruskals()
     # print graph MST
@@ -125,17 +161,4 @@ def main():
     for edge in MST:
         print(f"{edge[0]}\t\t{edge[1]}")
 
-# main() 
-
-def testMain():
-    graph = Graph()
-    
-    file = open("test.txt", "r")
-    for line in file:
-        values = line.split()
-        graph.addEdge(int(values[0]), int(values[1]), int(values[2]))
-        graph.addEdge(int(values[1]), int(values[0]), int(values[2]))
-
-    graph.kruskals()  
-
-testMain()
+main() 
