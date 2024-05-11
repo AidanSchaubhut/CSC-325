@@ -63,12 +63,20 @@ class Heap:
             - index of the largest child if it exists, None otherwise
         '''
 
-        # find indexes of left and right child of the current (index) node
-        # return None if left child index is past last index
-        # otherwise return the index of the largest child
-
         ### WRITE YOUR CODE HERE###
+        # Find the indexes of the right and left children
+        leftChildIndex = 2 * index + 1
+        rightChildIndex = 2 * index + 2
 
+        # If there is no children then return None
+        if leftChildIndex >= lastIndex:
+            return None
+        
+        # Compare the values of the children and return in the larger child's index
+        if self.data[leftChildIndex] > self.data[rightChildIndex]:
+            return leftChildIndex
+        else:
+            return rightChildIndex
         
     def __siftDownFromTo(self, fromIndex, last):
         ''' Inputs:
@@ -76,15 +84,24 @@ class Heap:
             - last -> index of the last node in the heap
             Output:
             - the node sifted down as far as necessary to maintain heap conditions
-        '''
-        
-        # repeat until node is in the right position
-        #   find index of a largest child
-        #   if index of the largest child is not found then finish
-        #   otherwise, if value of the largest child is larger than parent then swap
-        
+        '''    
         ### WRITE YOUR CODE HERE###
-
+        currIndex = fromIndex
+        while currIndex < last:
+            # Finding the index of the largest child
+            largestChild = self.__largestChild(currIndex, last)
+            # If there is no larger child then return the current value
+            if largestChild == None:
+                return self.data[currIndex]
+            
+            # If ther largest child is larger than the parent then swap the values
+            if self.data[largestChild] > self.data[currIndex]:
+                self.data[largestChild], self.data[currIndex] = self.data[currIndex], self.data[largestChild]
+                currIndex = largestChild
+            # Else return the current value
+            else:
+                return self.data[currIndex]
+            
     def sort(seq):
         
         h = Heap()
@@ -115,12 +132,11 @@ def main():
     print(f"Original list: {values}\n")
 
     ### WRITE YOUR CODE HERE###
-
+    h = Heap()
+    h.buildFrom(values)
     print(f"Heapified list:\n{h}")
     
     sorted_list = Heap.sort(values)
     print(f"Sorted list: {sorted_list}")
 
 main()
-
-    
