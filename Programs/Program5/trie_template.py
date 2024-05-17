@@ -30,7 +30,20 @@ class Trie:
     def __contains(node, key):
         
         ### WRITE YOUR CODE HERE###
-    
+        # if the key is empty then we found the word
+        if len(key) == 0:
+            return True
+        # if the node is None then the word is not in the trie
+        if node == None:
+            return False
+        # if the first unit of the key is equal to the first unit of the node then we go down the follows path
+        if key[0] == node.item[0]:
+            return Trie.__contains(node.follows, key[1:])
+        # else we need to go down the next path
+        return Trie.__contains(node.next, key)
+
+
+        
     def __contains__(self, key):
         return Trie.__contains(self.start, key+"$")
 
@@ -49,6 +62,8 @@ def main():
     for line in words:
         word = line.strip()
         trie.insert(word)
+
+    print("Misspelled words:")
         
     text = open(sys.argv[2], "r")
     for line in text:
@@ -56,5 +71,9 @@ def main():
             word = word.lower().strip(',').strip('.')
 
     ### WRITE YOUR CODE HERE###
-                        
+            if word not in trie:
+                print(f"  {word}")
+
+    
+
 main()
